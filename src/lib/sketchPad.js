@@ -1,26 +1,27 @@
 class SketchPad{
     constructor(container, size=400){
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = size;
-        this.canvas.height = size;
-        this.canvas.style=`
-            // background-color: white;
-            border-radius: 16px;
-        `;
-        this.canvas.classList.add('shadow-xl',"bg-cyan-100");
-        container.appendChild(this.canvas);
-
         const lineBreak = document.createElement("br");
-        container.appendChild(lineBreak);
 
         this.labelBox = document.createElement("input");
         this.labelBox.type = "text";
-        this.labelBox.placeholder = "Label";
+        this.labelBox.id = "labelBox";
+        this.labelBox.placeholder = "Draw something";
         this.labelBox.classList.add(
-            "w-full","bg-cyan-100","h-12","text-center", "my-4", "rounded-xl", "shadow-xl", "placeholder:text-cyan-700", "placeholder:font-bold" , "focus:outline-none", "focus:bg-cyan-50", "px-4", "focus:placeholder:text-cyan-50", "focus:text-cyan-900", "focus:font-bold"
+            "w-full","bg-neutral-50", "bg-opacity-70","h-12","text-center", "my-4", "rounded-xl", "shadow-xl", "placeholder:text-neutral-800",
+            "focus:outline-none", "focus:bg-cyan-50", "px-4", "focus:placeholder:text-cyan-50", "focus:text-cyan-900",
+            "focus:font-bold", "text-cyan-900", "font-bold"
         );
+        this.labelBox.disabled = true;
 
         container.appendChild(this.labelBox);
+
+        container.appendChild(lineBreak);
+
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = size;
+        this.canvas.height = size;
+        this.canvas.classList.add('shadow-xl',"bg-neutral-100", "bg-opacity-70", "rounded-xl");
+        container.appendChild(this.canvas);
 
         container.appendChild(lineBreak);
 
@@ -30,25 +31,34 @@ class SketchPad{
         this.undoBtn = document.createElement("button");
         this.undoBtn.innerHTML = "Undo";
         this.undoBtn.classList.add("transition-all","duration-600","ease-out",
-            "bg-pink-100","rounded-xl","h-8","w-fit","px-4","active:bg-pink-400", "active:text-cyan-900", "hover:bg-pink-200" , "text-cyan-700","font-bold","shadow-xl"
+            "bg-pink-200", "bg-opacity-70","rounded-tl-xl","rounded-bl-xl","h-12","w-full","px-4","active:bg-pink-400", "active:text-neutral-900",
+            "hover:bg-pink-200" , "text-neutral-700","font-bold","shadow-xl"
         );
         subContainer.appendChild(this.undoBtn);
 
-        this.downloadBtn = document.createElement("button");
-        this.downloadBtn.innerHTML = "Download";
-        this.downloadBtn.classList.add("transition-all","duration-600","ease-out",
-            "bg-pink-100","rounded-xl","h-8","w-fit","px-4","active:bg-pink-400", "active:text-cyan-900", "hover:bg-pink-200" , "text-cyan-700","font-bold","shadow-xl"
+        this.recognizeBtn = document.createElement("button");
+        this.recognizeBtn.innerHTML = "Recognize";
+        this.recognizeBtn.classList.add("transition-all","duration-600","ease-out",
+            "bg-blue-200", "bg-opacity-70","rounded-tr-xl","rounded-br-xl","h-12","w-full","px-4","active:bg-blue-400", "active:text-neutral-900",
+            "hover:bg-blue-300" , "text-neutral-700","font-bold","shadow-xl"
         );
-        subContainer.appendChild(this.downloadBtn);
+        this.recognizeBtn.onclick = recognize;
+        subContainer.appendChild(this.recognizeBtn);
 
         container.appendChild(subContainer);
 
         this.ctx=this.canvas.getContext('2d');
 
-        this.paths=[];
-        this.isDrawing=false;
+        this.reset();
 
         this.#addEventListeners();
+    }
+
+    reset() {
+        this.paths=[];
+        this.isDrawing=false;
+        this.labelBox.value = "";
+        this.#redraw();
     }
 
     #addEventListeners(){
@@ -67,7 +77,7 @@ class SketchPad{
             }
         }
 
-        this.canvas.onmouseup=(evt)=>{
+        document.onmouseup=(evt)=>{
             this.isDrawing=false;
         }
 
@@ -80,7 +90,7 @@ class SketchPad{
             const loc=evt.touches[0];
             this.canvas.onmousemove(loc);
         }
-        this.canvas.ontouchend=(evt)=>{
+        document.ontouchend=(evt)=>{
             this.canvas.onmouseup();
         }
 

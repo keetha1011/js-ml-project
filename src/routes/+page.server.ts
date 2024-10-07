@@ -1,7 +1,7 @@
 // @ts-ignore
 import type { Actions } from './$types';
 // @ts-ignore
-import { score } from "../../lib/decision_tree_model";
+import { score } from "../lib/decision_tree_model";
 
 type Point = [number, number];
 type Stroke = Point[];

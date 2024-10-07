@@ -1,4 +1,4 @@
-<div class="flex transition-all duration-300 ease-in-out flex-row h-screen w-screen justify-center animated-gradient">
+<div class="flex transition-all duration-300 ease-in-out flex-row h-screen w-screen justify-center animated-gradient backdrop-blur-3xl">
     <div id="content" class="flex flex-col xl:flex-row w-full sm:w-[70vw] items-center md:justify-evenly justify-center">
         <h1 class="text-cyan-100 text-5xl text-center font-extrabold">Sketch it up!</h1>
         <br>
@@ -33,7 +33,7 @@
                     })
                 }).then(response => response.json());
 
-                console.log(response.data[40]);
+                console.log(response.data);
                 if(response.data[40]==4) {
                     labelBox.value = "Airplane";
                 } else if (response.data[42]==4) {
@@ -61,8 +61,8 @@
 
     .animated-gradient {
         background-image: radial-gradient(circle at 70% 50%, #0072b3, #0040a1);
-        background-size: 200% 200%;
-        animation: gradient-animation 10s infinite ease-in-out;
+        background-size: 400% 400%;
+        animation: gradient-animation 20s infinite ease-in-out;
     }
 
     @keyframes gradient-animation {
